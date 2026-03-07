@@ -1,170 +1,217 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ClawFlow – AI-automation för svenska företag</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClawFlow — AI-automatisering för svenska företag</title>
+  <meta name="description" content="ClawFlow automatiserar ditt företags arbetsflöden med AI. Från 4 900 kr/mån.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- NAV -->
+  <!-- Navbar -->
   <nav class="navbar">
-    <div class="nav-logo">Claw<span>Flow</span></div>
-    <ul class="nav-links">
-      <li><a href="#about">Om oss</a></li>
-      <li><a href="#services">Tjänster</a></li>
-      <li><a href="#cases">Cases</a></li>
-      <li><a href="#contact" class="btn-nav">Kontakta oss</a></li>
-    </ul>
+    <div class="container navbar-inner">
+      <a href="#" class="logo">Claw<span class="logo-accent">Flow</span></a>
+      <ul class="nav-links">
+        <li><a href="#use-cases">Funktioner</a></li>
+        <li><a href="#how-it-works">Så funkar det</a></li>
+        <li><a href="#pricing">Priser</a></li>
+      </ul>
+      <a href="#cta" class="btn btn-primary nav-cta">Boka samtal</a>
+      <button class="mobile-menu-toggle" aria-label="Meny">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
   </nav>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-content">
-      <span class="badge">🤖 AI-automation</span>
-      <h1>Vi automatiserar det<br/><span class="gradient-text">tråkiga jobbet.</span></h1>
-      <p>ClawFlow hjälper svenska SMB-företag spara tid och växa med skräddarsydda AI-lösningar – utan krångel.</p>
-      <div class="hero-btns">
-        <a href="#contact" class="btn-primary">Boka ett samtal</a>
-        <a href="#cases" class="btn-secondary">Se våra cases →</a>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <div class="floating-card card1">
-        <span>⚡</span>
-        <p>Automatisera leadgenerering</p>
-      </div>
-      <div class="floating-card card2">
-        <span>📧</span>
-        <p>AI-driven mailsortering</p>
-      </div>
-      <div class="floating-card card3">
-        <span>📊</span>
-        <p>Rapporter på autopilot</p>
-      </div>
-      <div class="glow-circle"></div>
+  <!-- Hero -->
+  <section id="hero" class="section hero">
+    <div class="container hero-content">
+      <span class="badge">Från 4 900 kr/mån</span>
+      <h1 class="hero-title">Din bästa anställd — sover aldrig, blir aldrig sjuk, förhandlar aldrig om lön.</h1>
+      <p class="hero-subtitle">ClawFlow bygger skräddarsydda AI-automatiseringar som tar över tidskrävande arbetsflöden i ditt företag. Designat för svenska småföretag och medelstora bolag som vill växa utan att anställa fler.</p>
+      <a href="#cta" class="btn btn-primary btn-lg">Boka gratis genomgång</a>
     </div>
   </section>
 
-  <!-- STATS -->
-  <section class="stats">
-    <div class="stat">
-      <h2>40+</h2>
-      <p>Timmar sparade per kund/månad</p>
-    </div>
-    <div class="stat">
-      <h2>3x</h2>
-      <p>Snabbare leadhantering</p>
-    </div>
-    <div class="stat">
-      <h2>100%</h2>
-      <p>Svenska kunder & support</p>
-    </div>
-    <div class="stat">
-      <h2>0 kr</h2>
-      <p>Kostnad för första konsultation</p>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section class="about" id="about">
-    <div class="about-text">
-      <span class="tag">Om ClawFlow</span>
-      <h2>AI-automation som faktiskt funkar.</h2>
-      <p>Vi är ett svenskt AI-bolag som specialiserat oss på att hjälpa småföretagare och medelstora bolag att automatisera repetitiva processer – så att du kan fokusera på det som faktiskt skapar värde.</p>
-      <p>Inga tomma löften. Vi bygger, testar och levererar lösningar som sparar tid från dag ett.</p>
-    </div>
-    <div class="about-grid">
-      <div class="about-card">🔍 <span>Behovsanalys</span></div>
-      <div class="about-card">🛠️ <span>Bygge & integration</span></div>
-      <div class="about-card">🚀 <span>Driftsättning</span></div>
-      <div class="about-card">📈 <span>Löpande optimering</span></div>
-    </div>
-  </section>
-
-  <!-- SERVICES -->
-  <section class="services" id="services">
-    <span class="tag">Vad vi erbjuder</span>
-    <h2>Tjänster som sparar tid.</h2>
-    <div class="services-grid">
-      <div class="service-card">
-        <div class="service-icon">📧</div>
-        <h3>AI-mailhantering</h3>
-        <p>Sortera, prioritera och svara på mail automatiskt med AI som förstår din verksamhet.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">🎯</div>
-        <h3>Leadgenerering</h3>
-        <p>Hitta och kvalificera potentiella kunder automatiskt – fyll din pipeline utan manuellt arbete.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">📝</div>
-        <h3>Content-automation</h3>
-        <p>Skapa inlägg, offerter och rapporter med AI-stöd anpassat efter ditt varumärke.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">🔗</div>
-        <h3>Systemintegrationer</h3>
-        <p>Koppla ihop dina verktyg – CRM, mail, Notion, Drive – och låt dem prata med varandra.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">🤖</div>
-        <h3>AI-assistenter</h3>
-        <p>En personlig AI-assistent som kan svara kunder, boka möten och hantera ärenden dygnet runt.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon">📊</div>
-        <h3>Rapportering</h3>
-        <p>Automatiska rapporter och dashboards som ger dig koll på verksamheten utan manuell datainsamling.</p>
+  <!-- Stats -->
+  <section id="stats" class="section stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-number">10x</span>
+          <span class="stat-label">Snabbare arbetsflöden</span>
+          <p class="stat-desc">Uppgifter som tog timmar sker nu på minuter med AI-automatisering.</p>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">80%</span>
+          <span class="stat-label">Tidsbesparing</span>
+          <p class="stat-desc">Våra kunder sparar i snitt 80% av tiden på repetitiva uppgifter.</p>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number">100+</span>
+          <span class="stat-label">Företag litar på oss</span>
+          <p class="stat-desc">Svenska företag som redan automatiserat sina arbetsflöden med ClawFlow.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- CASES -->
-  <section class="cases" id="cases">
-    <span class="tag">Case studies</span>
-    <h2>Resultat vi är stolta över.</h2>
-    <div class="cases-grid">
-      <div class="case-card">
-        <div class="case-tag">E-handel</div>
-        <h3>50% färre kundtjänstärenden</h3>
-        <p>Implementerade en AI-chatbot som hanterar vanliga frågor automatiskt, vilket halverade antalet manuella ärenden.</p>
-        <div class="case-result">⏱️ Sparade: 20h/vecka</div>
+  <!-- Vad din AI-medarbetare gör -->
+  <section id="use-cases" class="section features-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge">Funktioner</span>
+        <h2>Vad din AI-medarbetare gör</h2>
+        <p class="section-subtitle">Din AI-assistent arbetar dygnet runt och hanterar allt från kundkontakt till administration — så du kan fokusera på det som driver tillväxt.</p>
       </div>
-      <div class="case-card">
-        <div class="case-tag">Konsultbolag</div>
-        <h3>3x fler kvalificerade leads</h3>
-        <p>Automatiserad leadgenerering och uppföljning via LinkedIn och mail ökade pipelinen dramatiskt.</p>
-        <div class="case-result">📈 ROI: 400% på 3 månader</div>
-      </div>
-      <div class="case-card">
-        <div class="case-tag">Redovisningsbyrå</div>
-        <h3>Offerter på 5 minuter</h3>
-        <p>Byggde ett AI-system som genererar skräddarsydda offerter baserat på kundens behov automatiskt.</p>
-        <div class="case-result">⚡ Från 2h → 5 min per offert</div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <span class="feature-icon">📧</span>
+          <h3>E-post & kundtjänst</h3>
+          <p>Svarar på kundfrågor, sorterar inkommande mail och eskalerar vid behov — automatiskt och personligt.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">📊</span>
+          <h3>Rapporter & analys</h3>
+          <p>Sammanställer data från flera källor till tydliga rapporter och dashboards varje morgon.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">📅</span>
+          <h3>Bokningar & schemaläggning</h3>
+          <p>Hanterar kalenderbokning, påminnelser och uppföljning utan manuellt arbete.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🧾</span>
+          <h3>Faktura & ekonomi</h3>
+          <p>Skapar, skickar och följer upp fakturor. Kategoriserar utgifter och synkar med bokföringen.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🔗</span>
+          <h3>Systemintegration</h3>
+          <p>Kopplar ihop dina befintliga verktyg — CRM, bokföring, lager — till ett sömlöst flöde.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon">🚀</span>
+          <h3>Lead-generering</h3>
+          <p>Identifierar och kvalificerar potentiella kunder, och skickar personliga uppföljningar automatiskt.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section class="contact" id="contact">
-    <div class="contact-box">
-      <span class="tag">Kom igång</span>
-      <h2>Redo att automatisera?</h2>
-      <p>Boka ett kostnadsfritt 30-minuterssamtal så berättar vi hur vi kan hjälpa just ditt företag.</p>
-      <a href="mailto:hej@clawflow.se" class="btn-primary">Boka samtal →</a>
-      <p class="contact-sub">Eller maila oss direkt: <a href="mailto:hej@clawflow.se">hej@clawflow.se</a></p>
+  <!-- Så här fungerar det -->
+  <section id="how-it-works" class="section steps-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge">Kom igång</span>
+        <h2>Så här fungerar det</h2>
+        <p class="section-subtitle">Tre enkla steg till en AI-medarbetare som jobbar dygnet runt för ditt företag.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>Boka en gratis genomgång</h3>
+          <p>Vi analyserar dina arbetsflöden och identifierar var AI kan spara mest tid och pengar.</p>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3>Vi bygger din AI-lösning</h3>
+          <p>Inom 1–2 veckor levererar vi en skräddarsydd automatisering anpassad till dina system och behov.</p>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3>Ditt team växer — utan anställning</h3>
+          <p>Din AI-medarbetare tar över repetitiva uppgifter direkt. Du fokuserar på strategisk tillväxt.</p>
+        </div>
+      </div>
+      <div class="steps-cta">
+        <a href="#cta" class="btn btn-primary btn-lg">Boka gratis genomgång →</a>
+      </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-logo">Claw<span>Flow</span></div>
-    <p>© 2026 ClawFlow. AI-automation för svenska företag.</p>
+  <!-- Pricing -->
+  <section id="pricing" class="section pricing-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge">Priser</span>
+        <h2>Enkel och transparent prissättning</h2>
+        <p class="section-subtitle">Välj det paket som passar ditt företag. Ingen bindningstid, ingen dold kostnad.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-card-inner">
+            <span class="pricing-tier">Starter</span>
+            <div class="pricing-price">
+              <span class="pricing-amount">4 900</span>
+              <span class="pricing-currency">kr/mån</span>
+            </div>
+            <p class="pricing-setup">Uppstartskostnad: 2 900 kr</p>
+            <ul class="pricing-features">
+              <li>1 AI-medarbetare</li>
+              <li>E-post & kundtjänst-automation</li>
+              <li>Grundläggande rapportering</li>
+              <li>Onboarding & setup ingår</li>
+              <li>Support via e-post</li>
+            </ul>
+            <a href="#cta" class="btn btn-outline btn-lg">Kom igång</a>
+          </div>
+        </div>
+        <div class="pricing-card pricing-card--popular">
+          <div class="pricing-card-inner">
+            <span class="pricing-popular-badge">Populärast</span>
+            <span class="pricing-tier">Growth</span>
+            <div class="pricing-price">
+              <span class="pricing-amount">7 900</span>
+              <span class="pricing-currency">kr/mån</span>
+            </div>
+            <p class="pricing-setup">Uppstartskostnad: 2 900 kr</p>
+            <ul class="pricing-features">
+              <li>1 AI-medarbetare</li>
+              <li>Alla Starter-funktioner</li>
+              <li>Avancerade integrationer</li>
+              <li>Lead-generering & CRM-koppling</li>
+              <li>Prioriterad support</li>
+              <li>Månatlig optimeringsgenomgång</li>
+            </ul>
+            <a href="#cta" class="btn btn-primary btn-lg">Kom igång</a>
+          </div>
+        </div>
+      </div>
+      <div class="pricing-footer-info">
+        <p class="pricing-comparison">En anställd kostar 500 000 kr/år. Din AI-medarbetare från 60 000 kr/år.</p>
+        <p class="pricing-extra">+3 000 kr/mån per ytterligare AI-medarbetare</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta" class="section cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2 class="cta-title">Redo att automatisera ditt företag?</h2>
+        <p class="cta-subtitle">Boka en kostnadsfri genomgång och se hur mycket tid och pengar din AI-medarbetare kan spara.</p>
+        <a href="#cta" class="btn btn-primary btn-lg">Boka gratis genomgång →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a href="#" class="logo footer-logo">Claw<span class="logo-accent">Flow</span></a>
+      <p class="footer-copy">ClawFlow &copy; 2026, Sveriges AI-medarbetare</p>
+    </div>
   </footer>
 
-  <script src="script.js"></script>
 </body>
 </html>
