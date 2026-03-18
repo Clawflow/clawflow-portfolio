@@ -1,6 +1,6 @@
-# ClawFlow Portfolio
+# AI Kollegorna Portfolio
 
-Modern portfolio-/landningssida för ClawFlow – AI-automation för svenska SMB-företag.
+Modern portfolio-/landningssida för AI Kollegorna – AI-automation för svenska SMB-företag.
 
 ## Stack
 - HTML5
