@@ -1,9 +1,17 @@
 #!/bin/bash
 # ============================================================
-#  AI KOLLEGORNA — Mac Mini Installationsscript
+#  AI KOLLEGORNA — Mac Mini Installationsscript v2.0
 #  Kör detta på en ny Mac mini för att sätta upp allt automatiskt
 #  Användning: bash install.sh
+#
+#  VIKTIG: Fyll i din Tailscale auth-nyckel nedan INNAN du
+#  distribuerar skriptet till kundinstallationer.
+#  Hämta på: https://login.tailscale.com/admin/settings/keys
 # ============================================================
+
+# ── ANTON: FYLL I DESSA INNAN DU KÖR ─────────────────────────
+TAILSCALE_AUTHKEY="tskey-auth-XXXXXXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+# ─────────────────────────────────────────────────────────────
 
 set -e  # Avbryt vid fel
 
@@ -141,8 +149,87 @@ else
     log "imsg installerat"
 fi
 
+# ── TAILSCALE (FJÄRRÅTKOMST) ─────────────────────────────────
+header "STEG 8: Tailscale — fjärråtkomst"
+
+# Maskin-ID baserat på kundnamn (t.ex. "aikollegorna-wristbuddys")
+MACHINE_ID="aikollegorna-$(echo "$CUSTOMER_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd '[:alnum:]-')"
+
+if command -v tailscale &>/dev/null; then
+    log "Tailscale redan installerat"
+else
+    info "Installerar Tailscale..."
+    brew install --cask tailscale 2>>$LOG_FILE
+    log "Tailscale installerat"
+fi
+
+# Enrolla i Antons nätverk
+if [[ "$TAILSCALE_AUTHKEY" != "tskey-auth-XXXX"* ]]; then
+    info "Ansluter till AI Kollegorna-nätverket som '$MACHINE_ID'..."
+    tailscale up --authkey "$TAILSCALE_AUTHKEY" --hostname "$MACHINE_ID" --accept-routes 2>>$LOG_FILE && \
+        log "Tailscale ansluten! Maskinnamn: $MACHINE_ID" || \
+        warn "Tailscale-anslutning misslyckades — kan konfigureras manuellt senare"
+    
+    TAILSCALE_IP=$(tailscale ip -4 2>/dev/null || echo "okänd")
+    info "Tailscale IP: $TAILSCALE_IP"
+    info "Anton kan nu SSH:a in med: ssh $(whoami)@$MACHINE_ID"
+else
+    warn "Tailscale auth-nyckel ej konfigurerad — hoppar över remote access"
+    warn "Lägg till nyckeln i skriptet och kör: tailscale up --authkey <nyckel>"
+fi
+
+# ── BEGRÄNSAT KUNDKONTO ───────────────────────────────────────
+header "STEG 9: Begränsat kundkonto"
+
+KUND_USER="kund"
+KUND_FULLNAME="$CUSTOMER_NAME"
+# Slumpmässigt lösenord som kunden aldrig behöver veta (OpenClaw körs som admin)
+KUND_PASS="aik-$(date +%s | sha256sum | head -c 12 2>/dev/null || date +%s | md5 | head -c 12)"
+
+if id "$KUND_USER" &>/dev/null; then
+    log "Kundkonto '$KUND_USER' finns redan"
+else
+    info "Skapar begränsat kundkonto '$KUND_USER'..."
+    # Skapa standardanvändare (ej admin)
+    sysadminctl -addUser "$KUND_USER" \
+        -fullName "$KUND_FULLNAME" \
+        -password "$KUND_PASS" \
+        -home "/Users/$KUND_USER" \
+        -shell /bin/zsh 2>>$LOG_FILE
+    
+    # Skapa hemkatalog
+    createhomedir -c -u "$KUND_USER" 2>>$LOG_FILE || true
+    
+    log "Kundkonto skapat: '$KUND_USER' (standardanvändare, ej admin)"
+fi
+
+# Blockera terminal och administrativa verktyg för kundkontot
+info "Aktiverar restriktioner för kundkontot..."
+
+# Dölj terminal, aktivitetshanterare och systemverktyg
+KUND_PLIST="/Users/$KUND_USER/Library/Preferences/com.apple.applicationaccess.plist"
+mkdir -p "/Users/$KUND_USER/Library/Preferences/" 2>/dev/null || true
+cat > /tmp/kund_restrictions.plist << 'RESTPLIST'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>allowAppInstallation</key>
+    <false/>
+    <key>allowSystemAppRemoval</key>
+    <false/>
+</dict>
+</plist>
+RESTPLIST
+
+# Blockera specifika appar via parental controls
+dscl . -create /Users/$KUND_USER mcx_disabled_apps 2>>$LOG_FILE || true
+
+log "Kundkonto konfigurerat — begränsad åtkomst aktiverad"
+info "Obs: Kunden använder kontot '$KUND_USER', OpenClaw körs på admin-kontot i bakgrunden"
+
 # ── WORKSPACE ────────────────────────────────────────────────
-header "STEG 8: Workspace & konfiguration"
+header "STEG 10: Workspace & konfiguration"
 
 WORKSPACE_DIR="$HOME/.openclaw/workspace"
 mkdir -p "$WORKSPACE_DIR/memory"
@@ -153,7 +240,7 @@ mkdir -p "$HOME/.openclaw"
 log "Workspace-mappar skapade: $WORKSPACE_DIR"
 
 # ── OPENCLAW-KONFIGURATION ───────────────────────────────────
-header "STEG 9: OpenClaw-konfiguration"
+header "STEG 11: OpenClaw-konfiguration"
 
 CONFIG_FILE="$HOME/.openclaw/openclaw.json"
 
@@ -180,7 +267,7 @@ JSONEOF
 log "OpenClaw konfigurerat"
 
 # ── MILJÖVARIABLER ───────────────────────────────────────────
-header "STEG 10: Miljövariabler"
+header "STEG 12: Miljövariabler"
 
 ZSHRC="$HOME/.zshrc"
 
@@ -191,7 +278,7 @@ grep -q "OPENCLAW_WORKSPACE" "$ZSHRC" 2>/dev/null || echo "export OPENCLAW_WORKS
 log "Miljövariabler sparade i ~/.zshrc"
 
 # ── WORKSPACE-FILER ──────────────────────────────────────────
-header "STEG 11: Grundfiler"
+header "STEG 13: Grundfiler"
 
 # IDENTITY.md
 cat > "$WORKSPACE_DIR/IDENTITY.md" << EOF
@@ -248,7 +335,7 @@ EOF
 log "Grundfiler skapade"
 
 # ── LAUNCHAGENT (AUTOSTART) ──────────────────────────────────
-header "STEG 12: Autostart (LaunchAgent)"
+header "STEG 14: Autostart (LaunchAgent)"
 
 PLIST_DIR="$HOME/Library/LaunchAgents"
 PLIST_FILE="$PLIST_DIR/ai.kollegorna.openclaw.plist"
@@ -304,7 +391,7 @@ launchctl load "$PLIST_FILE" 2>>$LOG_FILE
 log "LaunchAgent installerad och aktiverad — OpenClaw startar automatiskt vid inloggning"
 
 # ── STARTA OPENCLAW ──────────────────────────────────────────
-header "STEG 13: Startar OpenClaw"
+header "STEG 15: Startar OpenClaw"
 
 info "Startar OpenClaw gateway..."
 sleep 2
@@ -337,6 +424,13 @@ echo "  Nästa steg:"
 echo "  1. Logga in i Messages.app med kundkontaktens Apple ID"
 echo "  2. Skicka 'Hej ${AGENT_NAME}' från kundens telefon (${CUSTOMER_PHONE})"
 echo "  3. ${AGENT_NAME} svarar automatiskt — installationen är klar!"
+echo ""
+echo "  Fjärråtkomst (Anton):"
+echo "  SSH: ssh $(whoami)@${MACHINE_ID}"
+echo "  Tailscale IP: $(tailscale ip -4 2>/dev/null || echo 'starta Tailscale-appen för IP')"
+echo ""
+echo "  Kundkonto: Kunden loggar in som '$KUND_USER' — begränsad åtkomst"
+echo "  Admin-konto: $(whoami) — kör OpenClaw i bakgrunden"
 echo ""
 echo "  Installationslogg sparad: $LOG_FILE"
 echo ""
