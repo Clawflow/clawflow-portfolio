@@ -34,7 +34,7 @@ echo ""
 echo "  ╔═══════════════════════════════════════╗"
 echo "  ║      AI KOLLEGORNA AB                 ║"
 echo "  ║      Mac Mini Installationsscript     ║"
-echo "  ║      v1.0 — 2026                      ║"
+echo "  ║      v2.0 — 2026                      ║"
 echo "  ╚═══════════════════════════════════════╝"
 echo ""
 echo "  Det här skriptet installerar och konfigurerar"
@@ -184,7 +184,7 @@ header "STEG 9: Begränsat kundkonto"
 KUND_USER="kund"
 KUND_FULLNAME="$CUSTOMER_NAME"
 # Slumpmässigt lösenord som kunden aldrig behöver veta (OpenClaw körs som admin)
-KUND_PASS="aik-$(date +%s | sha256sum | head -c 12 2>/dev/null || date +%s | md5 | head -c 12)"
+KUND_PASS="aik-$(date +%s | openssl dgst -sha256 | awk '{print $2}' | head -c 12)"
 
 if id "$KUND_USER" &>/dev/null; then
     log "Kundkonto '$KUND_USER' finns redan"
