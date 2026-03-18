@@ -40,12 +40,16 @@ read -p "  Kundens företagsnamn: " CUSTOMER_NAME
 read -p "  Kundens kontaktperson: " CUSTOMER_CONTACT
 read -p "  Kundens telefon (iMessage, t.ex. +46701234567): " CUSTOMER_PHONE
 read -p "  Anthropic API-nyckel (från console.anthropic.com): " ANTHROPIC_KEY
+echo ""
+read -p "  Vad ska AI-assistenten heta? (t.ex. Luna, Nova, Saga): " AGENT_NAME
+[[ -z "$AGENT_NAME" ]] && AGENT_NAME="Luna"
 
 echo ""
 info "Konfiguration:"
-echo "  Företag:  $CUSTOMER_NAME"
-echo "  Kontakt:  $CUSTOMER_CONTACT"
-echo "  Telefon:  $CUSTOMER_PHONE"
+echo "  Företag:    $CUSTOMER_NAME"
+echo "  Kontakt:    $CUSTOMER_CONTACT"
+echo "  Telefon:    $CUSTOMER_PHONE"
+echo "  Agentnamn:  $AGENT_NAME"
 echo ""
 
 read -p "  Är detta korrekt? (j/n): " CONFIRM
@@ -191,7 +195,7 @@ header "STEG 11: Grundfiler"
 
 # IDENTITY.md
 cat > "$WORKSPACE_DIR/IDENTITY.md" << EOF
-- **Name:** Luna
+- **Name:** ${AGENT_NAME}
 - **Creature:** AI-driven business assistant for ${CUSTOMER_NAME}
 - **Vibe:** Professional yet warm
 - **Emoji:** 🌙
@@ -207,7 +211,7 @@ EOF
 
 # MEMORY.md (tomt)
 cat > "$WORKSPACE_DIR/MEMORY.md" << EOF
-# 🧠 MEMORY.md — Lunas långtidsminne
+# 🧠 MEMORY.md — ${AGENT_NAME}s långtidsminne
 
 > Installerad av AI Kollegorna AB för ${CUSTOMER_NAME}
 > Kontakt: ${CUSTOMER_CONTACT}
@@ -235,7 +239,7 @@ EOF
 cat > "$WORKSPACE_DIR/SOUL.md" << EOF
 # SOUL.md
 
-Du är Luna, AI-assistent installerad av AI Kollegorna AB hos ${CUSTOMER_NAME}.
+Du är ${AGENT_NAME}, AI-assistent installerad av AI Kollegorna AB hos ${CUSTOMER_NAME}.
 
 Var genuint hjälpsam. Ha åsikter. Var resursstark innan du frågar.
 Respektera att du är en gäst i deras verksamhet.
@@ -319,20 +323,20 @@ header "✅ INSTALLATION KLAR!"
 
 echo ""
 echo "  ╔═══════════════════════════════════════════════╗"
-echo "  ║  Luna är nu installerad och redo!             ║"
+echo "  ║  ${AGENT_NAME} är nu installerad och redo!$(printf '%*s' $((19-${#AGENT_NAME})) '')║"
 echo "  ║                                               ║"
 echo "  ║  Kund:    ${CUSTOMER_NAME}$(printf '%*s' $((23-${#CUSTOMER_NAME})) '')║"
 echo "  ║  Kontakt: ${CUSTOMER_CONTACT}$(printf '%*s' $((23-${#CUSTOMER_CONTACT})) '')║"
 echo "  ║  iMessage: ${CUSTOMER_PHONE}$(printf '%*s' $((22-${#CUSTOMER_PHONE})) '')║"
 echo "  ║                                               ║"
-echo "  ║  Luna startar automatiskt vid inloggning.     ║"
+echo "  ║  ${AGENT_NAME} startar automatiskt vid inloggning. $(printf '%*s' $((5-${#AGENT_NAME})) '')║"
 echo "  ║  Loggfiler: ~/ai-kollegorna-logs/             ║"
 echo "  ╚═══════════════════════════════════════════════╝"
 echo ""
 echo "  Nästa steg:"
 echo "  1. Logga in i Messages.app med kundkontaktens Apple ID"
-echo "  2. Skicka 'Hej Luna' från kundens telefon (${CUSTOMER_PHONE})"
-echo "  3. Luna svarar automatiskt — installationen är klar!"
+echo "  2. Skicka 'Hej ${AGENT_NAME}' från kundens telefon (${CUSTOMER_PHONE})"
+echo "  3. ${AGENT_NAME} svarar automatiskt — installationen är klar!"
 echo ""
 echo "  Installationslogg sparad: $LOG_FILE"
 echo ""
