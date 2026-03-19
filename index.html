@@ -5,13 +5,31 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- ═══ Google Analytics 4 ═══ -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WTCM8VQSWK"></script>
+    <!-- ═══ Google Analytics 4 (med GDPR consent mode) ═══ -->
+    <!-- Default consent state -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+      // Default: denied
+      gtag('consent', 'default', {
+        analytics_storage: 'denied'
+      });
+    </script>
+    <!-- GA4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WTCM8VQSWK"></script>
+    <script>
       gtag('js', new Date());
       gtag('config', 'G-WTCM8VQSWK');
+    </script>
+    <!-- Aktivera GA4 bara om samtycke finns -->
+    <script>
+      window.addEventListener('load', function() {
+        if (localStorage.getItem('aikollegorna_cookie_consent') === 'accepted') {
+          if (typeof gtag !== 'undefined') {
+            gtag('consent', 'update', { analytics_storage: 'granted' });
+          }
+        }
+      });
     </script>
 
     <!-- ═══ SEO: Primära meta-taggar ═══ -->
@@ -93,8 +111,8 @@
       }
     }
     </script>
-    <script type="module" crossorigin src="/assets/index-Dy8E6O--.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-B5yISIBz.css">
+    <script type="module" crossorigin src="/assets/index-CSo3sis8.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-VglCvj8I.css">
   </head>
   <body>
     <div id="root"></div>
