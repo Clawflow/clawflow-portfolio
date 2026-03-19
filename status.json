@@ -1,7 +1,15 @@
 {
   "updated": "2026-03-19T11:00:00Z",
   "status": "idle",
-  "sessions": [],
-  "lastMessage": "Systemet är igång och redo.",
-  "securityLevel": "ok"
+  "sessions": [
+    {"name": "design-polish-v2", "status": "completed", "duration": "4m 12s", "time": "2026-03-19T10:20:00Z"},
+    {"name": "status-page", "status": "completed", "duration": "2m 45s", "time": "2026-03-19T10:55:00Z"}
+  ],
+  "lastMessage": "Statussida byggd och deployad.",
+  "securityLevel": "ok",
+  "lastCommit": {
+    "hash": "b75d17c",
+    "message": "Status-sida: mobilanpassad live-status för Luna",
+    "time": "2026-03-19T10:55:00Z"
+  }
 }

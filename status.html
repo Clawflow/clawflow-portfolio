@@ -327,6 +327,7 @@
 
   <!-- ═══ FOOTER MED NEDRÄKNING ═══ -->
   <footer class="footer">
+    <div id="last-commit" style="margin-bottom:8px;opacity:0.5;font-size:0.7rem;letter-spacing:0.03em;"></div>
     Auto-refresh om <span id="countdown">30</span>s
   </footer>
 
@@ -459,6 +460,13 @@
 
       // ── Meddelande ──
       document.getElementById('lastMessage').textContent = data.lastMessage || '—';
+
+      // Senaste commit
+      if (data.lastCommit) {
+        const c = data.lastCommit;
+        const t = new Date(c.time).toLocaleString('sv-SE', { timeZone: 'Europe/Stockholm', day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+        document.getElementById('last-commit').textContent = `↑ ${c.hash} · ${c.message} · ${t}`;
+      }
 
       // ── Säkerhet ──
       const sec = securityInfo(data.securityLevel);
