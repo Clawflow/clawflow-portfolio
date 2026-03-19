@@ -1,4 +1,17 @@
 User-agent: *
 Allow: /
-
+Disallow: /api/
 Sitemap: https://aikollegorna.se/sitemap.xml
+
+# AI crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
