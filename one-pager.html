@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Kollegorna — Din AI-medarbetare</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple: #7C3AED;
+    --purple-light: #EDE9FE;
+    --purple-dark: #5B21B6;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --bg: #ffffff;
+    --bg-gray: #f8fafc;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%);
+    color: white;
+    padding: 2.5rem 3rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .logo { font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; }
+  .logo span { opacity: 0.7; font-weight: 400; font-size: 0.9rem; margin-left: 0.25rem; }
+  .tagline {
+    font-size: 1.05rem;
+    opacity: 0.9;
+    margin-top: 0.5rem;
+    max-width: 380px;
+    line-height: 1.4;
+  }
+  .header-right { text-align: right; font-size: 0.8rem; opacity: 0.8; }
+  .header-right a { color: white; }
+  .header-badge {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+  }
+
+  /* ===== MAIN ===== */
+  .main { padding: 2rem 3rem; }
+
+  /* ===== AWARD BANNER ===== */
+  .award-banner {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border: 2px solid #f59e0b;
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .award-banner .trophy { font-size: 2rem; }
+  .award-banner h3 { color: #78350f; font-size: 0.95rem; margin-bottom: 0.2rem; }
+  .award-banner p { color: #92400e; font-size: 0.82rem; line-height: 1.4; }
+  .award-banner strong { font-weight: 700; }
+
+  /* ===== SECTION TITLES ===== */
+  h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--purple-light);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  h2 .dot { width: 8px; height: 8px; background: var(--purple); border-radius: 50%; display: inline-block; }
+
+  /* ===== 3 FEATURES ===== */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .feature-card {
+    background: var(--bg-gray);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    border-top: 3px solid var(--purple);
+  }
+  .feature-card .icon { font-size: 1.75rem; margin-bottom: 0.5rem; display: block; }
+  .feature-card h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .feature-card p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+
+  /* ===== PRICING ===== */
+  .pricing {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .price-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    text-align: center;
+    position: relative;
+    background: white;
+  }
+  .price-card.popular {
+    border: 2px solid var(--purple);
+    background: var(--purple-light);
+  }
+  .popular-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--purple);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.2rem 0.75rem;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .price-card h3 { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
+  .price-amount { font-size: 1.8rem; font-weight: 800; color: var(--purple); }
+  .price-amount span { font-size: 0.8rem; font-weight: 400; color: var(--text-muted); }
+  .price-setup { font-size: 0.75rem; color: var(--text-muted); margin: 0.25rem 0 0.75rem; }
+  .price-features { list-style: none; text-align: left; }
+  .price-features li { font-size: 0.8rem; padding: 0.25rem 0; color: var(--text); display: flex; align-items: center; gap: 0.4rem; }
+  .price-features li::before { content: '✓'; color: var(--success); font-weight: 700; }
+
+  /* ===== STATS ===== */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .stat-card {
+    background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%);
+    color: white;
+    border-radius: 10px;
+    padding: 1.25rem;
+    text-align: center;
+  }
+  .stat-number { font-size: 2rem; font-weight: 800; display: block; }
+  .stat-label { font-size: 0.78rem; opacity: 0.85; margin-top: 0.25rem; }
+  .stat-source { font-size: 0.7rem; opacity: 0.65; margin-top: 0.3rem; display: block; }
+
+  /* ===== COMPARISON TABLE ===== */
+  .comparison {
+    margin-bottom: 2rem;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .comparison table { width: 100%; border-collapse: collapse; }
+  .comparison thead { background: var(--purple); color: white; }
+  .comparison thead th { padding: 0.75rem 1rem; text-align: left; font-size: 0.85rem; font-weight: 600; }
+  .comparison thead th:first-child { width: 40%; }
+  .comparison tbody tr:nth-child(even) { background: var(--bg-gray); }
+  .comparison tbody td { padding: 0.6rem 1rem; font-size: 0.82rem; border-bottom: 1px solid var(--border); }
+  .comparison tbody td:first-child { font-weight: 500; color: var(--text-muted); }
+  .check { color: var(--success); font-weight: 700; }
+  .cross { color: var(--danger); font-weight: 700; }
+  .warn { color: var(--warning); font-weight: 700; }
+
+  /* ===== HOW IT WORKS ===== */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+  .step {
+    text-align: center;
+    padding: 1rem 0.75rem;
+    background: var(--bg-gray);
+    border-radius: 8px;
+    position: relative;
+  }
+  .step-num {
+    width: 28px; height: 28px;
+    background: var(--purple);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem;
+    margin: 0 auto 0.5rem;
+  }
+  .step h4 { font-size: 0.8rem; font-weight: 700; margin-bottom: 0.25rem; }
+  .step p { font-size: 0.72rem; color: var(--text-muted); }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    background: var(--text);
+    color: white;
+    padding: 1.5rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .footer h4 { font-size: 0.8rem; font-weight: 700; margin-bottom: 0.4rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px; }
+  .footer p, .footer a { font-size: 0.85rem; color: white; text-decoration: none; display: block; margin-bottom: 0.15rem; }
+  .footer a:hover { text-decoration: underline; }
+  .qr-placeholder {
+    width: 70px; height: 70px;
+    border: 2px dashed rgba(255,255,255,0.3);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; color: rgba(255,255,255,0.5);
+    text-align: center; line-height: 1.3;
+    margin-top: 0.25rem;
+  }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { max-width: 100%; font-size: 12px; }
+    .header { padding: 1.5rem 2rem; }
+    .main { padding: 1.5rem 2rem; }
+    .footer { padding: 1rem 2rem; }
+    .feature-card, .price-card, .stat-card, .step { break-inside: avoid; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="logo">AI Kollegorna <span>AB</span></div>
+    <div class="tagline">Din AI-medarbetare — sover aldrig, sjuknar aldrig, förhandlar aldrig om lön.</div>
+  </div>
+  <div class="header-right">
+    <div class="header-badge">🔒 GDPR-säkert</div>
+    <div>aikollegorna.se</div>
+    <div>hej@aikollegorna.se</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- AWARD -->
+  <div class="award-banner">
+    <div class="trophy">🏆</div>
+    <div>
+      <h3>Vår kund Wristbuddys — utsedd till Sveriges snabbast växande e-handlare 2025</h3>
+      <p><strong>2 334% tillväxt</strong> och #1 på Svea Banks e-handelsraket-lista. Med AI Kollegorna hanterar de produktbilder, kundmejl och administration — och sparar 12 timmar i veckan.</p>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <h2><span class="dot"></span> Vad ingår</h2>
+  <div class="features">
+    <div class="feature-card">
+      <span class="icon">🤖</span>
+      <h3>AI hanterar din administration</h3>
+      <p>Mejl, kundärenden, offerter, bokningar, rapporter. Allt sker automatiskt — dygnet runt.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">🔒</span>
+      <h3>100% GDPR-säkert, on-premise</h3>
+      <p>All data stannar på er Mac Mini. Inget går till molnet. Inga tredjepartsleverantörer som äger er data.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">⚡</span>
+      <h3>Igång på 1–2 dagar</h3>
+      <p>Vi installerar allt. Ni behöver inte kunna något tekniskt. Support ingår varje månad.</p>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <h2><span class="dot"></span> Resultat i siffror</h2>
+  <div class="stats">
+    <div class="stat-card">
+      <span class="stat-number">12h</span>
+      <div class="stat-label">Genomsnittlig tidsbesparing per vecka</div>
+      <span class="stat-source">Baserat på kunddata</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">8×</span>
+      <div class="stat-label">Genomsnittlig ROI inom 6 månader</div>
+      <span class="stat-source">Starter-paket, 1 agent</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">440 000 kr</span>
+      <div class="stat-label">Besparing vs. en heltidsanställd/år</div>
+      <span class="stat-source">Starter-paket vs. medellön</span>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <h2><span class="dot"></span> Priser</h2>
+  <div class="pricing">
+    <div class="price-card">
+      <h3>Starter</h3>
+      <div class="price-amount">4 900 <span>kr/mån</span></div>
+      <div class="price-setup">+ 2 900 kr setup (engång)</div>
+      <ul class="price-features">
+        <li>1 AI-medarbetare</li>
+        <li>3 integrationer</li>
+        <li>E-postsupport</li>
+        <li>6 månaders bindning</li>
+        <li>On-premise (Mac Mini)</li>
+      </ul>
+    </div>
+    <div class="price-card popular">
+      <div class="popular-badge">⭐ Mest populär</div>
+      <h3>Growth</h3>
+      <div class="price-amount">7 900 <span>kr/mån</span></div>
+      <div class="price-setup">+ 2 900 kr setup (engång)</div>
+      <ul class="price-features">
+        <li>2 AI-medarbetare</li>
+        <li>6 integrationer</li>
+        <li>Prioritetssupport</li>
+        <li>Månatlig genomgång</li>
+        <li>On-premise (Mac Mini)</li>
+      </ul>
+    </div>
+    <div class="price-card">
+      <h3>Enterprise</h3>
+      <div class="price-amount" style="font-size:1.3rem;padding-top:0.4rem">Offert</div>
+      <div class="price-setup">Setup ingår</div>
+      <ul class="price-features">
+        <li>Obegränsat antal agenter</li>
+        <li>Alla integrationer</li>
+        <li>Dedikerad support</li>
+        <li>SLA-avtal</li>
+        <li>On-premise eller hybrid</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- COMPARISON -->
+  <h2><span class="dot"></span> AI-medarbetare vs. anställd</h2>
+  <div class="comparison">
+    <table>
+      <thead>
+        <tr>
+          <th>Jämförelse</th>
+          <th>AI-medarbetare (Starter)</th>
+          <th>Vanlig anställd</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Månadskostnad</td>
+          <td><strong style="color:#7C3AED">4 900 kr/mån</strong></td>
+          <td>35 000–50 000 kr/mån</td>
+        </tr>
+        <tr>
+          <td>Dygnet-runt-arbete</td>
+          <td><span class="check">✓ Alltid</span></td>
+          <td><span class="cross">✗ 8h/dag</span></td>
+        </tr>
+        <tr>
+          <td>Sjukdagar</td>
+          <td><span class="check">✓ Existerar inte</span></td>
+          <td><span class="cross">✗ Kostar i snitt 28 000 kr/år</span></td>
+        </tr>
+        <tr>
+          <td>GDPR-säker</td>
+          <td><span class="check">✓ On-premise, data lämnar ej er server</span></td>
+          <td><span class="warn">⚠ Beror på vilka system de använder</span></td>
+        </tr>
+        <tr>
+          <td>Setup-tid</td>
+          <td><span class="check">✓ 1–2 dagar</span></td>
+          <td><span class="cross">✗ 1–3 månader (rekrytering + onboarding)</span></td>
+        </tr>
+        <tr>
+          <td>Uppsägningstid</td>
+          <td><span class="check">✓ Ingen (efter 6 mån)</span></td>
+          <td><span class="cross">✗ 1–6 månader</span></td>
+        </tr>
+        <tr>
+          <td>Kostnad år 1</td>
+          <td><strong style="color:#7C3AED">61 700 kr (inkl. setup)</strong></td>
+          <td>420 000–600 000 kr (inkl. arbetsgivaravgifter)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <h2><span class="dot"></span> Så fungerar det</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h4>Samtal (30 min)</h4>
+      <p>Vi kartlägger vilka processer som tar mest tid.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h4>Installation (dag 1)</h4>
+      <p>Vi skickar en Mac Mini och installerar allt på distans.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h4>Konfiguration (dag 2)</h4>
+      <p>AI:n tränas på era processer och integreras med era system.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h4>Igång!</h4>
+      <p>Er AI-medarbetare börjar arbeta. Vi följer upp varje månad.</p>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>
+    <h4>Kontakt</h4>
+    <a href="mailto:hej@aikollegorna.se">hej@aikollegorna.se</a>
+    <a href="https://aikollegorna.se">aikollegorna.se</a>
+    <p style="margin-top:0.5rem;font-size:0.75rem;opacity:0.6">AI Kollegorna AB · Stockholm</p>
+  </div>
+  <div>
+    <h4>Boka ett gratis samtal</h4>
+    <p style="font-size:0.82rem">30 minuter. Vi visar ett live-demo och ger er en kostnadsfri analys av vilka processer som är enklast att automatisera.</p>
+    <a href="https://aikollegorna.se/kontakt" style="color:#A78BFA;margin-top:0.4rem">aikollegorna.se/kontakt →</a>
+  </div>
+  <div style="text-align:center">
+    <h4>Scanna för hemsida</h4>
+    <div class="qr-placeholder">QR-kod<br>aikollegorna.se</div>
+  </div>
+</div>
+
+</body>
+</html>
