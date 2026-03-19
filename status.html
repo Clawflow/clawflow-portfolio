@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>🌙 Luna Status — AI Kollegorna</title>
+  <meta name="description" content="Live-status för Luna, AI Kollegornas autonoma agent." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════════════
+       CSS Reset & Grundstilar
+       ═══════════════════════════════════════════ */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg:          #0a0a0f;
+      --bg-card:     #12121a;
+      --bg-card-alt: #16161f;
+      --border:      #1e1e2e;
+      --text:        #e2e2ef;
+      --text-dim:    #8888a0;
+      --accent:      #7C3AED;
+      --accent-glow: rgba(124, 58, 237, 0.3);
+      --green:       #22c55e;
+      --green-glow:  rgba(34, 197, 94, 0.25);
+      --yellow:      #eab308;
+      --yellow-glow: rgba(234, 179, 8, 0.25);
+      --red:         #ef4444;
+      --red-glow:    rgba(239, 68, 68, 0.25);
+      --radius:      12px;
+    }
+
+    html {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      min-height: 100dvh;
+      padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ═══════════════════════════════════════════
+       Header
+       ═══════════════════════════════════════════ */
+    .header {
+      text-align: center;
+      padding: 28px 0 8px;
+    }
+
+    .header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #c4b5fd, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header .updated {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    /* ═══════════════════════════════════════════
+       Kort (card)
+       ═══════════════════════════════════════════ */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-top: 16px;
+    }
+
+    .card-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+
+    /* ═══════════════════════════════════════════
+       Status-indikator (pulsande cirkel)
+       ═══════════════════════════════════════════ */
+    .status-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 20px;
+    }
+
+    .status-orb-wrap {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      margin-bottom: 16px;
+    }
+
+    /* Puls-ring */
+    .status-orb-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -10px;
+      border-radius: 50%;
+      animation: pulse 2.2s ease-in-out infinite;
+    }
+
+    .status-orb {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Färg-varianter */
+    .status-idle .status-orb       { background: radial-gradient(circle at 35% 35%, #4ade80, var(--green)); box-shadow: 0 0 30px var(--green-glow); }
+    .status-idle .status-orb-wrap::before { background: var(--green-glow); }
+
+    .status-active .status-orb     { background: radial-gradient(circle at 35% 35%, #fde047, var(--yellow)); box-shadow: 0 0 30px var(--yellow-glow); }
+    .status-active .status-orb-wrap::before { background: var(--yellow-glow); }
+
+    .status-error .status-orb      { background: radial-gradient(circle at 35% 35%, #fca5a5, var(--red)); box-shadow: 0 0 30px var(--red-glow); }
+    .status-error .status-orb-wrap::before { background: var(--red-glow); }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1);   opacity: 0.5; }
+      50%      { transform: scale(1.35); opacity: 0; }
+    }
+
+    .status-label {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .status-sub {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    /* ═══════════════════════════════════════════
+       Sessions-lista
+       ═══════════════════════════════════════════ */
+    .session-list {
+      list-style: none;
+    }
+
+    .session-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .session-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .session-icon {
+      font-size: 1.15rem;
+      flex-shrink: 0;
+      width: 28px;
+      text-align: center;
+    }
+
+    .session-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .session-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .session-meta {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .session-empty {
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      padding: 12px 0;
+    }
+
+    /* ═══════════════════════════════════════════
+       Meddelande-kort
+       ═══════════════════════════════════════════ */
+    .message-text {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    /* ═══════════════════════════════════════════
+       Säkerhetsstatus
+       ═══════════════════════════════════════════ */
+    .security-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .security-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .security-dot.ok    { background: var(--green);  box-shadow: 0 0 8px var(--green-glow); }
+    .security-dot.warn  { background: var(--yellow); box-shadow: 0 0 8px var(--yellow-glow); }
+    .security-dot.alert { background: var(--red);    box-shadow: 0 0 8px var(--red-glow); }
+
+    .security-text {
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+
+    /* ═══════════════════════════════════════════
+       Footer / Nedräkning
+       ═══════════════════════════════════════════ */
+    .footer {
+      text-align: center;
+      padding: 24px 0 32px;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .footer span {
+      color: var(--accent);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ═══════════════════════════════════════════
+       Laddnings-skeleton (visas innan data hämtats)
+       ═══════════════════════════════════════════ */
+    .loading-placeholder {
+      text-align: center;
+      color: var(--text-dim);
+      padding: 20px 0;
+      font-size: 0.85rem;
+    }
+
+    /* ═══════════════════════════════════════════
+       Fade-in animation
+       ═══════════════════════════════════════════ */
+    .fade-in {
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ═══ HEADER ═══ -->
+  <header class="header">
+    <h1>🌙 Luna Status</h1>
+    <p class="updated" id="updatedText">Laddar…</p>
+  </header>
+
+  <!-- ═══ STATUS-KORT ═══ -->
+  <div class="card status-card status-idle" id="statusCard">
+    <div class="status-orb-wrap">
+      <div class="status-orb"></div>
+    </div>
+    <div class="status-label" id="statusLabel">—</div>
+    <div class="status-sub" id="statusSub"></div>
+  </div>
+
+  <!-- ═══ SENASTE SESSIONER ═══ -->
+  <div class="card">
+    <div class="card-title">Senaste sessioner</div>
+    <ul class="session-list" id="sessionList">
+      <li class="loading-placeholder">Laddar sessioner…</li>
+    </ul>
+  </div>
+
+  <!-- ═══ SENASTE MEDDELANDE ═══ -->
+  <div class="card">
+    <div class="card-title">Senaste meddelande</div>
+    <p class="message-text" id="lastMessage">—</p>
+  </div>
+
+  <!-- ═══ SÄKERHETSSTATUS ═══ -->
+  <div class="card">
+    <div class="card-title">Säkerhet</div>
+    <div class="security-row">
+      <div class="security-dot ok" id="securityDot"></div>
+      <div class="security-text" id="securityText">—</div>
+    </div>
+  </div>
+
+  <!-- ═══ FOOTER MED NEDRÄKNING ═══ -->
+  <footer class="footer">
+    Auto-refresh om <span id="countdown">30</span>s
+  </footer>
+
+  <!-- ═══════════════════════════════════════════
+       JavaScript — all logik
+       ═══════════════════════════════════════════ -->
+  <script>
+    // ─── Fallback-data om fetch misslyckas ───
+    const FALLBACK = {
+      updated: "2026-03-19T10:00:00Z",
+      status: "idle",
+      sessions: [
+        { name: "design-polish-v2",  status: "completed", duration: "4m 12s", time: "2026-03-19T10:20:00Z" },
+        { name: "integritetspolicy", status: "completed", duration: "6m 8s",  time: "2026-03-19T09:14:00Z" },
+        { name: "blogg-artikel-2",   status: "completed", duration: "4m 50s", time: "2026-03-19T08:45:00Z" }
+      ],
+      lastMessage: "Design polish v2 deployad till GitHub Pages.",
+      securityLevel: "ok"
+    };
+
+    // ─── Refresh-intervall (sekunder) ───
+    const REFRESH_INTERVAL = 30;
+    let countdown = REFRESH_INTERVAL;
+    let countdownTimer = null;
+
+    // ─── Tidsformatering (Europe/Stockholm) ───
+    const stockholmFmt = new Intl.DateTimeFormat('sv-SE', {
+      timeZone: 'Europe/Stockholm',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit'
+    });
+
+    const stockholmTimeFmt = new Intl.DateTimeFormat('sv-SE', {
+      timeZone: 'Europe/Stockholm',
+      hour: '2-digit', minute: '2-digit'
+    });
+
+    /**
+     * Beräkna "X min sedan"-text relativt till nu
+     */
+    function timeAgo(isoString) {
+      const then = new Date(isoString);
+      const now  = new Date();
+      const diffMs = now - then;
+
+      if (diffMs < 0) return 'just nu';
+
+      const seconds = Math.floor(diffMs / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours   = Math.floor(minutes / 60);
+      const days    = Math.floor(hours / 24);
+
+      if (seconds < 60)  return 'just nu';
+      if (minutes === 1)  return '1 min sedan';
+      if (minutes < 60)   return minutes + ' min sedan';
+      if (hours === 1)    return '1 timme sedan';
+      if (hours < 24)     return hours + ' timmar sedan';
+      if (days === 1)     return '1 dag sedan';
+      return days + ' dagar sedan';
+    }
+
+    /**
+     * Statusikon för session
+     */
+    function sessionIcon(status) {
+      switch (status) {
+        case 'completed': return '✅';
+        case 'running':   return '🔄';
+        case 'error':     return '❌';
+        default:          return '⬜';
+      }
+    }
+
+    /**
+     * Statustext och CSS-klass
+     */
+    function statusInfo(status) {
+      switch (status) {
+        case 'idle':   return { label: 'Idle',  sub: 'Luna vilar — inga aktiva sessioner', cls: 'status-idle' };
+        case 'active': return { label: 'Aktiv', sub: 'En session körs just nu',           cls: 'status-active' };
+        case 'error':  return { label: 'Fel',   sub: 'Något gick fel — kontrollera loggar', cls: 'status-error' };
+        default:       return { label: 'Okänd', sub: '',                                    cls: 'status-idle' };
+      }
+    }
+
+    /**
+     * Säkerhetsnivå → text och CSS-klass
+     */
+    function securityInfo(level) {
+      switch (level) {
+        case 'ok':    return { text: 'Alla system OK',            cls: 'ok' };
+        case 'warn':  return { text: 'Varning — kontrollera',     cls: 'warn' };
+        case 'alert': return { text: 'ALERT — åtgärd krävs!',    cls: 'alert' };
+        default:      return { text: 'Okänd status',              cls: 'ok' };
+      }
+    }
+
+    /**
+     * Rendera all data till DOM:en
+     */
+    function render(data) {
+      // ── Uppdaterad-tidsstämpel ──
+      const updatedEl = document.getElementById('updatedText');
+      updatedEl.textContent = 'Uppdaterad: ' + timeAgo(data.updated) + ' (' + stockholmFmt.format(new Date(data.updated)) + ')';
+
+      // ── Status-kort ──
+      const card = document.getElementById('statusCard');
+      const info = statusInfo(data.status);
+      // Ta bort gamla klasser och lägg till rätt
+      card.classList.remove('status-idle', 'status-active', 'status-error');
+      card.classList.add(info.cls);
+      document.getElementById('statusLabel').textContent = info.label;
+      document.getElementById('statusSub').textContent   = info.sub;
+
+      // ── Sessioner ──
+      const list = document.getElementById('sessionList');
+      if (!data.sessions || data.sessions.length === 0) {
+        list.innerHTML = '<li class="session-empty">Inga sessioner registrerade ännu.</li>';
+      } else {
+        list.innerHTML = data.sessions.map(s => `
+          <li class="session-item fade-in">
+            <div class="session-icon">${sessionIcon(s.status)}</div>
+            <div class="session-info">
+              <div class="session-name">${escapeHtml(s.name)}</div>
+              <div class="session-meta">${escapeHtml(s.duration)} · ${stockholmTimeFmt.format(new Date(s.time))}</div>
+            </div>
+          </li>
+        `).join('');
+      }
+
+      // ── Meddelande ──
+      document.getElementById('lastMessage').textContent = data.lastMessage || '—';
+
+      // ── Säkerhet ──
+      const sec = securityInfo(data.securityLevel);
+      const dot = document.getElementById('securityDot');
+      dot.className = 'security-dot ' + sec.cls;
+      document.getElementById('securityText').textContent = sec.text;
+    }
+
+    /**
+     * Enkel HTML-escape för att undvika XSS
+     */
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    /**
+     * Hämta status.json och rendera
+     */
+    async function loadStatus() {
+      try {
+        // Cache-bust med tidsstämpel
+        const res = await fetch('status.json?t=' + Date.now());
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        render(data);
+      } catch (err) {
+        console.warn('Kunde inte hämta status.json, använder fallback:', err);
+        render(FALLBACK);
+      }
+
+      // Starta om nedräkningen
+      resetCountdown();
+    }
+
+    /**
+     * Nedräkningstimer i footern
+     */
+    function resetCountdown() {
+      countdown = REFRESH_INTERVAL;
+      if (countdownTimer) clearInterval(countdownTimer);
+      countdownTimer = setInterval(() => {
+        countdown--;
+        if (countdown < 0) countdown = REFRESH_INTERVAL;
+        document.getElementById('countdown').textContent = countdown;
+      }, 1000);
+    }
+
+    // ─── Kör direkt + var 30:e sekund ───
+    loadStatus();
+    setInterval(loadStatus, REFRESH_INTERVAL * 1000);
+  </script>
+</body>
+</html>
